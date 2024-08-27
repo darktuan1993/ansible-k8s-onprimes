@@ -1,8 +1,8 @@
-- name: Setup basic script
-  script: ../../global_vars/script/setup-ubuntu.sh
-  become: yes
-  register: script_output
+- name: Copy setup script to remote server
+  copy:
+    src: ../../global_vars/script/setup-ubuntu.sh
+    dest: /tmp/setup-ubuntu.sh
+    mode: "0755"
 
-- name: Xuất thông tin
-  debug:
-    var: script_output.stdout
+- name: Run setup script on remote server
+  shell: /tmp/setup-ubuntu.sh
