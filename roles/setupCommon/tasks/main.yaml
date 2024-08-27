@@ -5,8 +5,8 @@
     mode: "0755"
 
 - name: Run setup script on remote server
-  # shell: bash /tmp/setup-ubuntu.sh
-  script: /tmp/setup-ubuntu.sh
+  become: yes
+  command: /bin/bash /tmp/setup-ubuntu.sh
   register: script_output
 
 - name: Display stdout of the script
