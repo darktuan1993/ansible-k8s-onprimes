@@ -1,0 +1,8 @@
+- name: Setup basic script
+  script: ../../global_vars/script/delete-ubuntu.sh
+  become: yes
+  register: script_output
+
+- name: Xuất thông tin
+  debug:
+    var: script_output.stdout
