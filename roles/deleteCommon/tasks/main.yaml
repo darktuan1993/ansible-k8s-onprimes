@@ -1,4 +1,4 @@
-- name: Setup basic script
+- name: Delete basic script
   script: ../../global_vars/script/delete-ubuntu.sh
   become: yes
   register: script_output
