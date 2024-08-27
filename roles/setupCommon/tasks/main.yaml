@@ -7,3 +7,9 @@
 - name: Run setup script on remote server
   # shell: bash /tmp/setup-ubuntu.sh
   shell: echo "Hello"
+  register: script_output
+
+- name: Display stdout of the script
+  debug:
+    var: script_output.stdout  
+
