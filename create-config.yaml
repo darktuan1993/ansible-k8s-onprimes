@@ -1,6 +1,6 @@
 
 - name: CREATE CLUSTER KUBERNETES 
-  hosts: k8s-cluster
+  hosts: masters
   roles:
     - pingCheck
     - setupCommon
