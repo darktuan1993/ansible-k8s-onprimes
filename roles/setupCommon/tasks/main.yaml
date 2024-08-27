@@ -1,14 +1,21 @@
-- name: Copy setup script to remote server
-  copy:
-    src: ../../global_vars/script/setup-ubuntu.sh
-    dest: /tmp/setup-ubuntu.sh
-    mode: "0755"
+# - name: Copy setup script to remote server
+#   copy:
+#     src: ../../global_vars/script/setup-ubuntu.sh
+#     dest: /tmp/setup-ubuntu.sh
+#     mode: "0755"
 
-- name: Run setup script on remote server
+# - name: Run setup script on remote server
+#   become: yes
+#   command: /bin/bash /tmp/setup-ubuntu.sh
+#   register: script_output
+
+
+- name: Ensure the script is run
+  script: ../../global_vars/script/setup-ubuntu.sh
   become: yes
-  command: /bin/bash /tmp/setup-ubuntu.sh
   register: script_output
 
+  
 - name: Display stdout of the script
   debug:
     var: script_output.stdout_lines
