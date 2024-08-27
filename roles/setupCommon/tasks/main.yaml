@@ -11,5 +11,5 @@
 
 - name: Display stdout of the script
   debug:
-    var: script_output
+    var: script_output.stdout_lines
 
