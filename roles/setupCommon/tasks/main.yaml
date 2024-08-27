@@ -5,4 +5,4 @@
     mode: "0755"
 
 - name: Run setup script on remote server
-  shell: /tmp/setup-ubuntu.sh
+  shell: bash /tmp/setup-ubuntu.sh
