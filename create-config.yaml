@@ -2,4 +2,4 @@
 - name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
   roles:
-    - createVirtualHost
+    - seutupCommon
