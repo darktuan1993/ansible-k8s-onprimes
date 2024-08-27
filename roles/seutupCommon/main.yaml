@@ -1,3 +1,0 @@
-- name: Setup basic script
-  shell: bash ../../global_vars/script/setup-ubuntu.sh
-  become: yes
