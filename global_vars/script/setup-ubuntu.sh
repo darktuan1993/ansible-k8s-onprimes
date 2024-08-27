@@ -7,9 +7,11 @@ modprobe br_netfilter
 echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 echo 'br_netfilter' > /etc/modules-load.d/k8s.conf
 
-# VERSION="v1.28"
-# VERSION_k8s="1.28"
-# VERSION_PATCH='0-1.1'
+VERSION="v1.28"
+VERSION_k8s="1.28"
+VERSION_PATCH='0-1.1'
+
+echo $VERSION
 
 # {
 # cat << EOF | tee /etc/sysctl.d/kubernetes.conf
