@@ -7,63 +7,124 @@
 #   debug:
 #     var: script_output.stdout_lines
 
-- name: Update and upgrade apt packages
-  apt:
-    update_cache: yes
-    upgrade: dist
-    cache_valid_time: 86400 # Cache time in seconds
-    force_apt_get: yes
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 86400 # Cache time in seconds
+        force_apt_get: yes
 
-- name: Install vim
-  apt:
-    name: vim
-    state: present
-    force_apt_get: yes
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+        force_apt_get: yes
 
-- name: Install essential packages
-  apt:
-    name:
-      - curl
-      - apt-transport-https
-      - vim
-      - git
-      - nfs-common
-      - wget
-      - software-properties-common
-      - lsb-release
-      - ca-certificates
-    state: present
-    force_apt_get: yes
+    - name: Install essential packages
+      apt:
+        name:
+          - curl
+          - apt-transport-https
+          - vim
+          - git
+          - nfs-common
+          - wget
+          - software-properties-common
+          - lsb-release
+          - ca-certificates
+        state: present
+        force_apt_get: yes
 
-- name: Disable swap
-  command: swapoff -a
-  become: yes
+    - name: Disable swap
+      command: swapoff -a
 
-- name: Remove swap entry from fstab
-  lineinfile:
-    path: /etc/fstab
-    regexp: "^.*swap.*"
-    state: absent
+    - name: Remove swap entry from fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: "^.*swap.*"
+        state: absent
 
-- name: Load overlay module
-  modprobe:
-    name: overlay
-    state: present
+    - name: Load overlay module
+      modprobe:
+        name: overlay
+        state: present
 
-- name: Load br_netfilter module
-  modprobe:
-    name: br_netfilter
-    state: present
+    - name: Load br_netfilter module
+      modprobe:
+        name: br_netfilter
+        state: present
 
-- name: Enable net.bridge.bridge-nf-call-iptables
-  sysctl:
-    name: net.bridge.bridge-nf-call-iptables
-    value: "1"
-    state: present
-    reload: yes
+    - name: Enable net.bridge.bridge-nf-call-iptables
+      sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: "1"
+        state: present
+        reload: yes
 
-- name: Ensure br_netfilter is loaded on boot
-  copy:
-    dest: /etc/modules-load.d/k8s.conf
-    content: "br_netfilter\n"
-    mode: "0644"
+    - name: Ensure br_netfilter is loaded on boot
+      copy:
+        dest: /etc/modules-load.d/k8s.conf
+        content: "br_netfilter\n"
+        mode: "0644"
+
+    - name: Display Kubernetes version
+      debug:
+        msg: "Kubernetes Version: {{ VERSION }}"
+
+    - name: Configure sysctl for Kubernetes
+      block:
+        - name: Apply sysctl settings for Kubernetes
+          copy:
+            dest: /etc/sysctl.d/kubernetes.conf
+            content: |
+              net.bridge.bridge-nf-call-ip6tables = 1
+              net.bridge.bridge-nf-call-iptables = 1
+              net.ipv4.ip_forward = 1
+          mode: '0644'
+
+        - name: Apply sysctl settings
+          command: sysctl --system
+
+    - name: Create directory for apt keyrings
+      file:
+        path: /etc/apt/keyrings
+        state: directory
+        mode: '0755'
+
+    - name: Download and save Docker GPG key
+      command: >
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg |
+        gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+
+    - name: Add Docker APT repository
+      apt_repository:
+        repo: "deb [arch={{ ansible_architecture }} signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable"
+        state: present
+
+    - name: Update apt cache and install containerd
+      apt:
+        update_cache: yes
+        name: containerd.io
+        state: present
+        force_apt_get: yes
+
+    - name: Generate default containerd config
+      command: containerd config default
+      register: containerd_default_config
+
+    - name: Save default containerd config
+      copy:
+        dest: /etc/containerd/config.toml
+        content: "{{ containerd_default_config.stdout }}"
+
+    - name: Modify containerd config to use SystemdCgroup
+      replace:
+        path: /etc/containerd/config.toml
+        regexp: 'SystemdCgroup = false'
+        replace: 'SystemdCgroup = true'
+
+    - name: Restart containerd service
+      systemd:
+        name: containerd
+        state: restarted
+        enabled: yes
