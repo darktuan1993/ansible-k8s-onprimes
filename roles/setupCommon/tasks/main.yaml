@@ -7,71 +7,63 @@
 #   debug:
 #     var: script_output.stdout_lines
 
+- name: Update and upgrade apt packages
+  apt:
+    update_cache: yes
+    upgrade: dist
+    cache_valid_time: 86400 # Cache time in seconds
+    force_apt_get: yes
 
+- name: Install vim
+  apt:
+    name: vim
+    state: present
+    force_apt_get: yes
 
----
-- name: Setup and Configure Kubernetes Node
-  hosts: all
+- name: Install essential packages
+  apt:
+    name:
+      - curl
+      - apt-transport-https
+      - vim
+      - git
+      - nfs-common
+      - wget
+      - software-properties-common
+      - lsb-release
+      - ca-certificates
+    state: present
+    force_apt_get: yes
+
+- name: Disable swap
+  command: swapoff -a
   become: yes
-  tasks:
 
-    - name: Update and upgrade apt packages
-      apt:
-        update_cache: yes
-        upgrade: dist
-        cache_valid_time: 86400  # Cache time in seconds
-        force_apt_get: yes
+- name: Remove swap entry from fstab
+  lineinfile:
+    path: /etc/fstab
+    regexp: "^.*swap.*"
+    state: absent
 
-    - name: Install vim
-      apt:
-        name: vim
-        state: present
-        force_apt_get: yes
+- name: Load overlay module
+  modprobe:
+    name: overlay
+    state: present
 
-    - name: Install essential packages
-      apt:
-        name:
-          - curl
-          - apt-transport-https
-          - vim
-          - git
-          - nfs-common
-          - wget
-          - software-properties-common
-          - lsb-release
-          - ca-certificates
-        state: present
-        force_apt_get: yes
+- name: Load br_netfilter module
+  modprobe:
+    name: br_netfilter
+    state: present
 
-    - name: Disable swap
-      command: swapoff -a
-      become: yes
+- name: Enable net.bridge.bridge-nf-call-iptables
+  sysctl:
+    name: net.bridge.bridge-nf-call-iptables
+    value: "1"
+    state: present
+    reload: yes
 
-    - name: Remove swap entry from fstab
-      lineinfile:
-        path: /etc/fstab
-        regexp: '^.*swap.*'
-        state: absent
-
-    - name: Load overlay module
-      modprobe:
-        name: overlay
-        state: present
-
-    - name: Load br_netfilter module
-      modprobe:
-        name: br_netfilter
-        state: present
-
-    - name: Enable net.bridge.bridge-nf-call-iptables
-      sysctl:
-        name: net.bridge.bridge-nf-call-iptables
-        value: '1'
-        state: present
-        reload: yes
-
-    - name: Ensure br_netfilter is loaded on boot
-      copy:
-        dest: /etc/modules-load.d/k8s.conf
-        content: "br_netfilter\n"
-        mode: '0644'
+- name: Ensure br_netfilter is loaded on boot
+  copy:
+    dest: /etc/modules-load.d/k8s.conf
+    content: "br_netfilter\n"
+    mode: "0644"
