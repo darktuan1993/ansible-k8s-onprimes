@@ -77,15 +77,13 @@
   debug:
     var: script_output.stdout_lines
 
-- name: Create directory for apt keyrings
-  file:
-    path: /etc/apt/keyrings
-    state: directory
-    mode: '0755'
+- name: Download Docker GPG key
+  get_url:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    dest: /etc/apt/keyrings/docker.gpg
+    mode: '0644'
   become: yes
 
-- name: Download and save Docker GPG key
-  command: >
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg |
-    gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+- name: Convert Docker GPG key to binary format
+  command: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.gpg
   become: yes
