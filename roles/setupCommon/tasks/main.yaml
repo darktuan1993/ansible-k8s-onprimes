@@ -1,5 +1,5 @@
 - name: Run script setup basic
-  script: ../..//script/setup-ubuntu.sh
+  script: ../../script/setup-ubuntu.sh
   become: yes
   register: script_output
 
