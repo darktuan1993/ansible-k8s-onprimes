@@ -1,28 +1,77 @@
-# - name: Copy setup script to remote server
-#   copy:
-#     src: ../../global_vars/script/setup-ubuntu.sh
-#     dest: /tmp/setup-ubuntu.sh
-#     mode: "0755"
-
-# - name: Run setup script on remote server
+# - name: Ensure the setup script is run
+#   script: ../../global_vars/script/setup-ubuntu.sh
 #   become: yes
-#   command: /bin/bash /tmp/setup-ubuntu.sh
 #   register: script_output
 
-- name: Ensure the setup script is run
-  script: ../../global_vars/script/setup-ubuntu.sh
-  become: yes
-  register: script_output
-
-- name: Display stdout of the setup script
-  debug:
-    var: script_output.stdout_lines
-
-# - name: Run the sysctl configuration script
-#   script: ../../global_vars/script/sysctl.sh
-#   become: yes
-#   register: sysctl_output
-
-# - name: Display stdout of the sysctl script
+# - name: Display stdout of the setup script
 #   debug:
-#     var: sysctl_output.stdout_lines
+#     var: script_output.stdout_lines
+
+
+
+---
+- name: Setup and Configure Kubernetes Node
+  hosts: all
+  become: yes
+  tasks:
+
+    - name: Update and upgrade apt packages
+      apt:
+        update_cache: yes
+        upgrade: dist
+        cache_valid_time: 86400  # Cache time in seconds
+        force_apt_get: yes
+
+    - name: Install vim
+      apt:
+        name: vim
+        state: present
+        force_apt_get: yes
+
+    - name: Install essential packages
+      apt:
+        name:
+          - curl
+          - apt-transport-https
+          - vim
+          - git
+          - nfs-common
+          - wget
+          - software-properties-common
+          - lsb-release
+          - ca-certificates
+        state: present
+        force_apt_get: yes
+
+    - name: Disable swap
+      command: swapoff -a
+      become: yes
+
+    - name: Remove swap entry from fstab
+      lineinfile:
+        path: /etc/fstab
+        regexp: '^.*swap.*'
+        state: absent
+
+    - name: Load overlay module
+      modprobe:
+        name: overlay
+        state: present
+
+    - name: Load br_netfilter module
+      modprobe:
+        name: br_netfilter
+        state: present
+
+    - name: Enable net.bridge.bridge-nf-call-iptables
+      sysctl:
+        name: net.bridge.bridge-nf-call-iptables
+        value: '1'
+        state: present
+        reload: yes
+
+    - name: Ensure br_netfilter is loaded on boot
+      copy:
+        dest: /etc/modules-load.d/k8s.conf
+        content: "br_netfilter\n"
+        mode: '0644'

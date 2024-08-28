@@ -27,48 +27,48 @@ EOF
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 }
 
-# {
-#     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
-# }
+{
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+}
 
-# {
-#     apt-get update && apt-get install containerd.io -y
-#     containerd config default | tee /etc/containerd/config.toml
-#     sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i /etc/containerd/config.toml
-#     systemctl restart containerd
-# }
+{
+    apt-get update && apt-get install containerd.io -y
+    containerd config default | tee /etc/containerd/config.toml
+    sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i /etc/containerd/config.toml
+    systemctl restart containerd
+}
 
-# {
-#     curl -fsSL https://pkgs.k8s.io/core:/stable:/$VERSION/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-#     echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
-# }
+{
+    curl -fsSL https://pkgs.k8s.io/core:/stable:/$VERSION/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+    echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+}
 
-# apt-get update
-# sudo apt-get install -y kubeadm=$VERSION_k8s.$VERSION_PATCH kubelet=$VERSION_k8s.$VERSION_PATCH kubectl=$VERSION_k8s.$VERSION_PATCH --allow-change-held-packages
-# apt-mark hold kubelet kubeadm kubectl
+apt-get update
+sudo apt-get install -y kubeadm=$VERSION_k8s.$VERSION_PATCH kubelet=$VERSION_k8s.$VERSION_PATCH kubectl=$VERSION_k8s.$VERSION_PATCH --allow-change-held-packages
+apt-mark hold kubelet kubeadm kubectl
 
-# echo "source <(kubectl completion bash)" >> $HOME/.bashrc
+echo "source <(kubectl completion bash)" >> $HOME/.bashrc
 
-# # Setup crictl
+# Setup crictl
 
-# wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION.0/crictl-$VERSION.0-linux-amd64.tar.gz
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION.0/crictl-$VERSION.0-linux-amd64.tar.gz
 
-# tar zxvf crictl-$VERSION.0-linux-amd64.tar.gz
+tar zxvf crictl-$VERSION.0-linux-amd64.tar.gz
 
-# sudo mv crictl /usr/local/bin
+sudo mv crictl /usr/local/bin
 
-# cat <<EOF | sudo tee /etc/crictl.yaml
-# runtime-endpoint: unix:///run/containerd/containerd.sock
-# EOF
+cat <<EOF | sudo tee /etc/crictl.yaml
+runtime-endpoint: unix:///run/containerd/containerd.sock
+EOF
 
-# sudo wget https://storage.googleapis.com/gvisor/releases/nightly/latest/containerd-shim-runsc-v1 -O /usr/local/bin/containerd-shim-runsc-v1
-# sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
+sudo wget https://storage.googleapis.com/gvisor/releases/nightly/latest/containerd-shim-runsc-v1 -O /usr/local/bin/containerd-shim-runsc-v1
+sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 
-# sudo wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc -O /usr/local/bin/runsc
-# sudo chmod +x /usr/local/bin/runsc
+sudo wget https://storage.googleapis.com/gvisor/releases/nightly/latest/runsc -O /usr/local/bin/runsc
+sudo chmod +x /usr/local/bin/runsc
 
 
 
-# kubectl version 
-# kubeadm version
-# kubelet --version
+kubectl version 
+kubeadm version
+kubelet --version
