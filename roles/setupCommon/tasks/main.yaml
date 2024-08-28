@@ -71,7 +71,7 @@
       debug:
         msg: "Kubernetes Version: {{ VERSION }}"
 
-    - name: Configure sysctl for Kubernetes
+    # - name: Configure sysctl for Kubernetes
       block:
         - name: Apply sysctl settings for Kubernetes
           copy:
