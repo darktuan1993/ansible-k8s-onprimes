@@ -9,23 +9,20 @@
 #   command: /bin/bash /tmp/setup-ubuntu.sh
 #   register: script_output
 
-
-- name: Ensure the script is run
+- name: Ensure the setup script is run
   script: ../../global_vars/script/setup-ubuntu.sh
   become: yes
   register: script_output
 
-  
-- name: Display stdout of the script
+- name: Display stdout of the setup script
   debug:
     var: script_output.stdout_lines
 
-- name: Cài đặt hệ thống
+- name: Run the sysctl configuration script
   script: ../../global_vars/script/sysctl.sh
   become: yes
-  register: sysctl.stdout_lines
+  register: sysctl_output
 
-  
-- name: Cài đặt hệ thống hiển thị
+- name: Display stdout of the sysctl script
   debug:
-    var: sysctl.stdout_lines
+    var: sysctl_output.stdout_lines
