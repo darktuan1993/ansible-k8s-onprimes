@@ -23,8 +23,8 @@ EOF
 
 {
     # sysctl --system
-    sudo mkdir -p /etc/apt/keyrings
-    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+    mkdir -p /etc/apt/keyrings
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg |  gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 }
 
 {
@@ -55,9 +55,9 @@ wget https://github.com/kubernetes-sigs/cri-tools/releases/download/$VERSION.0/c
 
 tar zxvf crictl-$VERSION.0-linux-amd64.tar.gz
 
-sudo mv crictl /usr/local/bin
+mv crictl /usr/local/bin
 
-cat <<EOF | sudo tee /etc/crictl.yaml
+cat <<EOF | tee /etc/crictl.yaml
 runtime-endpoint: unix:///run/containerd/containerd.sock
 EOF
 
