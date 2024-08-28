@@ -6,17 +6,15 @@
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-
 - name: Setup Node Master First
   shell: |
-      echo "đây là node master 1"
-  when: is_first_master 
+    echo "đây là node master 1"
+  when: is_first_master
   register: script_output
 
 - name: Display stdout of the setup script
   debug:
     var: script_output.stdout_lines
-
 
 - name: Initialize Kubernetes on the first master
   shell: |
@@ -32,7 +30,15 @@
   debug:
     var: kubeadm_init_output.stdout_lines
 
-- name: Join node Master
+- name: Extract join command for control plane nodes
   set_fact:
-    join_command: "{{ kubeadm_init_output.stdout_lines | select('match', '^    kubeadm join') | list | join(' ') }}"
-  when: is_first_master
+    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | list | join(' ') }}"
+  when: ansible_play_hosts.index(inventory_hostname) == 0
+
+- name: Ensure join_command is defined
+  debug:
+    var: join_command
+
+- name: Join node to the control plane
+  shell: "{{ join_command }}"
+  when: ansible_play_hosts.index(inventory_hostname) > 0
