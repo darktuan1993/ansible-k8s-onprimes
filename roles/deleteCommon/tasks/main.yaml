@@ -1,8 +1,15 @@
-- name: Delete basic script
-  script: ../../global_vars/script/delete-ubuntu.sh
+- name: Copy remote
+  copy:
+    src: ../../global_vars/script/delete-ubuntu.sh
+    dest: /tmp/delete-ubuntu.sh
+    mode: "0755"
+  become: yes
+
+- name: Xóa Kubernetes
+  shell: /tmp/delete-ubuntu.sh
   become: yes
   register: script_output
 
-- name: Xuất thông tin
+- name: Display stdout of the setup script
   debug:
-    var: script_output.stdout
+    var: script_output.stdout_lines
