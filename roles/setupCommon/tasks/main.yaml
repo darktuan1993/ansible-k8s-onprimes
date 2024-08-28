@@ -1,5 +1,9 @@
+- name: List name record domain
+  include_vars:
+    file: ../../global_vars/var.yaml
+
 - name: Run script setup basic
-  script: ../../script/setup-ubuntu.sh v1.28 1.28 0-1.1
+  script: ../../script/setup-ubuntu.sh "{{ VERSION_k8s }}" "{{ VERSION_PATCH }}"
   become: yes
   register: script_output
 
