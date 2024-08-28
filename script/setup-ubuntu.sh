@@ -1,11 +1,11 @@
-apt-get update && apt-get upgrade -y
-apt-get install -y vim
-apt install curl apt-transport-https vim git nfs-common wget software-properties-common lsb-release ca-certificates -y
-swapoff -a; sed -i '/swap/d' /etc/fstab
-modprobe overlay
-modprobe br_netfilter
-echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
-echo 'br_netfilter' > /etc/modules-load.d/k8s.conf
+# apt-get update && apt-get upgrade -y
+# apt-get install -y vim
+# apt install curl apt-transport-https vim git nfs-common wget software-properties-common lsb-release ca-certificates -y
+# swapoff -a; sed -i '/swap/d' /etc/fstab
+# modprobe overlay
+# modprobe br_netfilter
+# echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+# echo 'br_netfilter' > /etc/modules-load.d/k8s.conf
 
 VERSION=$1
 VERSION_k8s=$2

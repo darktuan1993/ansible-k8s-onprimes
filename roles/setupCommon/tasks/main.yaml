@@ -1,5 +1,5 @@
 - name: Run script setup basic
-  script: ../../script/setup-ubuntu.sh
+  script: ../../script/setup-ubuntu.sh v1.28 1.28 0-1.1
   become: yes
   register: script_output
 
