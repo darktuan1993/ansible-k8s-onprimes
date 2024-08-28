@@ -28,6 +28,10 @@
   when: is_first_master
   register: kubeadm_init_output
 
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output.stdout_lines
+
 - name: Join node Master
   set_fact:
     join_command: "{{ kubeadm_init_output.stdout_lines | select('match', '^    kubeadm join') | list | join(' ') }}"
