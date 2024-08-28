@@ -43,9 +43,9 @@ EOF
     echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/$VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 }
 
-apt-get update
-sudo apt-get install -y kubeadm=$VERSION_k8s.$VERSION_PATCH kubelet=$VERSION_k8s.$VERSION_PATCH kubectl=$VERSION_k8s.$VERSION_PATCH --allow-change-held-packages
-apt-mark hold kubelet kubeadm kubectl
+# apt-get update
+# sudo apt-get install -y kubeadm=$VERSION_k8s.$VERSION_PATCH kubelet=$VERSION_k8s.$VERSION_PATCH kubectl=$VERSION_k8s.$VERSION_PATCH --allow-change-held-packages
+# apt-mark hold kubelet kubeadm kubectl
 
 # echo "source <(kubectl completion bash)" >> $HOME/.bashrc
 
