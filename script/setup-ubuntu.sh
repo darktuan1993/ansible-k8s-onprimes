@@ -38,8 +38,8 @@ systemctl restart containerd
 
 
 
-curl -fsSL https://pkgs.k8s.io/core:/stable:/v$VERSION/deb/Release.key | sudo gpg --dearmor --batch --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
-echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$VERSION/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
+curl -fsSL https://pkgs.k8s.io/core:/stable:/v$VERSION_k8s/deb/Release.key | sudo gpg --dearmor --batch --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
+echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$VERSION_k8s/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
 #############
 apt-get update
@@ -50,9 +50,9 @@ apt-mark hold kubelet kubeadm kubectl
 
 ############
 
-wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v$VERSION.0/crictl-v$VERSION.0-linux-amd64.tar.gz
+wget https://github.com/kubernetes-sigs/cri-tools/releases/download/v$VERSION_k8s.0/crictl-v$VERSION_k8s.0-linux-amd64.tar.gz
 
-tar zxvf crictl-v$VERSION.0-linux-amd64.tar.gz
+tar zxvf crictl-v$VERSION_k8s.0-linux-amd64.tar.gz
 
 mv crictl /usr/local/bin
 
