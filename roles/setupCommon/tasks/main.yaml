@@ -85,5 +85,5 @@
   become: yes
 
 - name: Convert Docker GPG key to binary format
-  command: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.gpg
+  shell: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.gpg
   become: yes
