@@ -6,6 +6,11 @@
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
+
+- name: Initialize Kubernetes on the first master
+  shell: |
+      echo "đây là node master 1"
+  when: is_first_master 
 # - name: Initialize Kubernetes on the first master
 #   shell: |
 #     kubeadm init \
