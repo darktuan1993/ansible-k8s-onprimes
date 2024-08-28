@@ -76,3 +76,16 @@
 - name: Display stdout of the setup script
   debug:
     var: script_output.stdout_lines
+
+- name: Create directory for apt keyrings
+  file:
+    path: /etc/apt/keyrings
+    state: directory
+    mode: '0755'
+  become: yes
+
+- name: Download and save Docker GPG key
+  command: >
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg |
+    gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+  become: yes
