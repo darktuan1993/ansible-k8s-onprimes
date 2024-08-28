@@ -77,19 +77,7 @@
   debug:
     var: script_output.stdout_lines
 
-- name: Download Docker GPG key
-  get_url:
-    url: https://download.docker.com/linux/ubuntu/gpg
-    dest: /etc/apt/keyrings/docker.gpg
-    mode: '0644'
-  become: yes
-
-- name: Ensure Docker GPG key exists
-  stat:
-    path: /etc/apt/keyrings/docker.gpg
-  register: gpg_key_stat
 
 - name: Convert Docker GPG key to binary format if it exists
-  shell: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.gpg
+  shell: curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
   become: yes
-  when: gpg_key_stat.stat.exists
