@@ -20,56 +20,12 @@
   debug:
     var: script_output.stdout_lines
 
-    # - name: Update and upgrade apt packages
-    #   apt:
-    #     update_cache: yes
-    #     upgrade: dist
-    #     cache_valid_time: 86400  # Cache time in seconds
-    #     force_apt_get: yes
+- name: Cài đặt hệ thống
+  script: ../../global_vars/script/sysctl.sh
+  become: yes
+  register: sysctl.stdout_lines
 
-    # - name: Install essential packages
-    #   apt:
-    #     name:
-    #       - vim
-    #       - curl
-    #       - apt-transport-https
-    #       - git
-    #       - nfs-common
-    #       - wget
-    #       - software-properties-common
-    #       - lsb-release
-    #       - ca-certificates
-    #     state: present
-    #     force_apt_get: yes
-
-    # - name: Disable swap
-    #   command: swapoff -a
-    #   become: yes
-
-    # - name: Remove swap entry from fstab
-    #   lineinfile:
-    #     path: /etc/fstab
-    #     regexp: '^.*swap.*'
-    #     state: absent
-
-    # - name: Load overlay module
-    #   modprobe:
-    #     name: overlay
-    #     state: present
-
-    # - name: Load br_netfilter module
-    #   modprobe:
-    #     name: br_netfilter
-    #     state: present
-
-    # - name: Ensure br_netfilter is loaded on boot
-    #   copy:
-    #     dest: /etc/modules-load.d/k8s.conf
-    #     content: "br_netfilter\n"
-
-    # - name: Enable net.bridge.bridge-nf-call-iptables
-    #   sysctl:
-    #     name: net.bridge.bridge-nf-call-iptables
-    #     value: '1'
-    #     state: present
-    #     reload: yes
+  
+- name: Cài đặt hệ thống hiển thị
+  debug:
+    var: sysctl.stdout_lines
