@@ -7,7 +7,7 @@
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
 
-- name: Initialize Kubernetes on the first master
+- name: Setup Node Master First
   shell: |
       echo "đây là node master 1"
   when: is_first_master 
@@ -18,17 +18,17 @@
     var: script_output.stdout_lines
 
 
-# - name: Initialize Kubernetes on the first master
-#   shell: |
-#     kubeadm init \
-#       --kubernetes-version=1.28.0 \
-#       --control-plane-endpoint="manager-cluster-k8s.bravo.com.vn:6443" \
-#       --pod-network-cidr=172.16.0.0/16 \
-#       --upload-certs
-#   when: is_first_master
-#   register: kubeadm_init_output
+- name: Initialize Kubernetes on the first master
+  shell: |
+    kubeadm init \
+      --kubernetes-version=1.28.0 \
+      --control-plane-endpoint="192.168.140.31:6443" \
+      --pod-network-cidr=172.16.0.0/16 \
+      --upload-certs
+  when: is_first_master
+  register: kubeadm_init_output
 
-# - name: Extract join command
-#   set_fact:
-#     join_command: "{{ kubeadm_init_output.stdout_lines | select('match', '^    kubeadm join') | list | join(' ') }}"
-#   when: is_first_master
+- name: Join node Master
+  set_fact:
+    join_command: "{{ kubeadm_init_output.stdout_lines | select('match', '^    kubeadm join') | list | join(' ') }}"
+  when: is_first_master
