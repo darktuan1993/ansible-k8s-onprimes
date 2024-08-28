@@ -3,5 +3,5 @@
   hosts: k8s-cluster
   roles:
     - pingCheck
-    # - setupCommon
-    - deleteCommon
+    - setupCommon
+    # - deleteCommon
