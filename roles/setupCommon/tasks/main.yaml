@@ -18,11 +18,11 @@
   debug:
     var: script_output.stdout_lines
 
-- name: Run the sysctl configuration script
-  script: ../../global_vars/script/sysctl.sh
-  become: yes
-  register: sysctl_output
+# - name: Run the sysctl configuration script
+#   script: ../../global_vars/script/sysctl.sh
+#   become: yes
+#   register: sysctl_output
 
-- name: Display stdout of the sysctl script
-  debug:
-    var: sysctl_output.stdout_lines
+# - name: Display stdout of the sysctl script
+#   debug:
+#     var: sysctl_output.stdout_lines
