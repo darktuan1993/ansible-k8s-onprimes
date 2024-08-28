@@ -4,5 +4,5 @@
   roles:
     - pingCheck
     # - setupCommon
-    - createMaster
+    # - createMaster
     # - deleteCommon
