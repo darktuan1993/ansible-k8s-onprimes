@@ -84,6 +84,12 @@
     mode: '0644'
   become: yes
 
-- name: Convert Docker GPG key to binary format
+- name: Ensure Docker GPG key exists
+  stat:
+    path: /etc/apt/keyrings/docker.gpg
+  register: gpg_key_stat
+
+- name: Convert Docker GPG key to binary format if it exists
   shell: gpg --dearmor -o /etc/apt/keyrings/docker.gpg /etc/apt/keyrings/docker.gpg
   become: yes
+  when: gpg_key_stat.stat.exists
