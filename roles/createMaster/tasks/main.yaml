@@ -11,6 +11,13 @@
   shell: |
       echo "đây là node master 1"
   when: is_first_master 
+  register: script_output
+
+- name: Display stdout of the setup script
+  debug:
+    var: script_output.stdout_lines
+
+
 # - name: Initialize Kubernetes on the first master
 #   shell: |
 #     kubeadm init \
