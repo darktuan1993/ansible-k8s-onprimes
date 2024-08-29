@@ -1,0 +1,49 @@
+- name: List name record domain
+  include_vars:
+    file: ../../global_vars/var.yaml
+
+# ############## CHECK THÔNG TIN MASTER  ####################
+- name: MASTER ĐẦU TIÊN
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+- name: MASTER KHÁC
+  ansible.builtin.set_fact:
+    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+
+- name: Debug the value of main master
+  debug:
+    var: is_first_master
+
+- name: Debug the value of other master
+  debug:
+    var: is_other_master
+
+# ############## THÔNG TIN MASTER KHÁC  ####################
+
+# Create token join node
+- name: Generate join command
+  shell: kubeadm token create --print-join-command
+  register: kubeadm_join_command
+  when: is_first_master
+
+- name: Export command join cluster
+  set_fact:
+    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
+  when: is_first_master
+
+- name: Export command join cluster
+  debug:
+    var: command_join_cluster
+  when: is_first_master
+
+# JOIN WORKER
+- name: JOIN MASTER OTHER IN CLUSTER
+  shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
+  register: join_master_output
+  when: is_other_master
+
+- name: join_master_output
+  debug:
+    var: join_master_output
+  when: is_other_master
