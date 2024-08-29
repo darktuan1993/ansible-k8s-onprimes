@@ -72,4 +72,7 @@
     certificate_key: "{{ upload_certs_output.stdout_lines | regex_search('Using certificate key:\\s+([a-zA-Z0-9]+)', '\\1') }}"
   when: is_first_master
 
-
+- name: Display certificate key
+  debug:
+    var: certificate_key
+  when: is_first_master
