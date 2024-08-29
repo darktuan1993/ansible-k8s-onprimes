@@ -101,4 +101,4 @@
 - name: join_master_output
   debug:
     var: join_master_output
-  when: is_first_master
+  when: is_other_master
