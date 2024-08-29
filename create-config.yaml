@@ -8,5 +8,5 @@
     # - role: joinMasterOther
     #   when: inventory_hostname in groups['masters']
     - role: joinWorkerOther
-      when: inventory_hostname in groups['slaves']
+      when: inventory_hostname in groups['slaves'] and ansible_play_hosts.index(inventory_hostname) == 0
     # - deleteCommon
