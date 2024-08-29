@@ -20,34 +20,34 @@
     var: is_other_master
 
 # Init First Node Master
-# - name: Initialize Kubernetes on the first master
-#   shell: |
-#     kubeadm init \
-#       --kubernetes-version=1.28.0 \
-#       --control-plane-endpoint="192.168.140.31:6443" \
-#       --pod-network-cidr=172.16.0.0/16 \
-#       --upload-certs
-#   when: is_first_master
-#   register: kubeadm_init_output
+- name: Initialize Kubernetes on the first master
+  shell: |
+    kubeadm init \
+      --kubernetes-version=1.28.0 \
+      --control-plane-endpoint="192.168.140.31:6443" \
+      --pod-network-cidr=172.16.0.0/16 \
+      --upload-certs
+  when: is_first_master
+  register: kubeadm_init_output
 
-# - name: Display stdout of the setup script
-#   debug:
-#     var: kubeadm_init_output.stdout_lines
-#   when: is_first_master
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output.stdout_lines
+  when: is_first_master
 
-# #  tạo thư mục service account
-# - name: Tạo thư mục service account
-#   shell: |
-#     mkdir -p $HOME/.kube
-#     cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-#     chown $(id -u):$(id -g) $HOME/.kube/config
-#   when: is_first_master
-#   register: createfolder
+#  tạo thư mục service account
+- name: Tạo thư mục service account
+  shell: |
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+  when: is_first_master
+  register: createfolder
 
-# - name: Tạo thư mục service account
-#   debug:
-#     var: createfolder.stdout_lines
-#   when: is_first_master
+- name: Tạo thư mục service account
+  debug:
+    var: createfolder.stdout_lines
+  when: is_first_master
 
 # Create token join node
 - name: Generate join command
@@ -92,19 +92,8 @@
     var: create_command_join
   when: is_first_master
 
-- name: Nhận biến
-  set_fact: "{{ hostvars[groups['masters'][0]].create_command_join }}"
+# JOIN MASTER
+- name: JOIN MASTER OTHER IN CLUSTER
+  shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
   register: join_master_output
   when: is_other_master
-
-- name: Trả biến
-  debug:
-    var: join_master_output
-  when: is_other_master
-
-# # Join Node Master
-# - name: Join Node Master
-#   shell: |
-#     {{create_command_join}}
-#   register: upload_certs_output
-#   when: is_other_master
