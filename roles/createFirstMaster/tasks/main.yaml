@@ -22,8 +22,8 @@
 
 - name: Copy Kubernetes manifest to remote server
   copy:
-    src: "../../global_vars/"
-    dest: "/tmp/manifest/"
+    src: "../../../script"
+    dest: "/tmp/"
     mode: '0755'
     directory_mode: '0755'
     recurse: yes
