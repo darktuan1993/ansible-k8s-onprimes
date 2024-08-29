@@ -5,3 +5,4 @@
     # - setupCommon
     - role: createMaster
       when: inventory_hostname in groups['masters']
+    - deleteCommon
