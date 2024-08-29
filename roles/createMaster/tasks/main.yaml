@@ -31,11 +31,11 @@
     join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }}"
   when: is_first_master
 
-- name: Display stdout of the setup script
-  debug:
-    var: join_command
-  when: is_first_master
-
 - name: Join node to the control plane
   shell: "{{ join_command }}"
+  register: join_result
   when: ansible_play_hosts.index(inventory_hostname) > 0
+
+- name: Display join result stdout
+  debug:
+    var: join_result.stdout
