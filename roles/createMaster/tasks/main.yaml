@@ -92,9 +92,19 @@
     var: create_command_join
   when: is_first_master
 
-# Join Node Master
-- name: Join Node Master
-  shell: |
-    {{create_command_join}}
-  register: upload_certs_output
+- name: Nhận biến
+  set_fact: "{{ hostvars[groups['masters'][0]].create_command_join }}"
+  register: join_master_output
   when: is_other_master
+
+- name: Trả biến
+  debug:
+    var: join_master_output
+  when: is_first_master
+
+# # Join Node Master
+# - name: Join Node Master
+#   shell: |
+#     {{create_command_join}}
+#   register: upload_certs_output
+#   when: is_other_master
