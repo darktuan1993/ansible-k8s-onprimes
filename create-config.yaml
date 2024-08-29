@@ -1,10 +1,12 @@
-- name: CREATE CLUSTER KUBERNETES
+- name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
   roles:
     - pingCheck
     # - setupCommon
     # - role: createFirstMaster
     #   when: inventory_hostname in groups['masters']
-    - role: joinMasterOther
-      when: inventory_hostname in groups['slaves']  and ansible_play_hosts.index(inventory_hostname) == 0
+    # - role: joinMasterOther
+    #   when: inventory_hostname in groups['masters']
+    - role: joinWorkerOther
+      when: inventory_hostname in groups['slaves']
     # - deleteCommon
