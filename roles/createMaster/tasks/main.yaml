@@ -62,9 +62,8 @@
 
 - name: Export command join cluster
   set_fact:
-    command_join_cluster: "{{kubeadm_join_command.stdout}}"
+    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
-  register: command_join_cluster
 
 # Tạo Certificate Join cluster node master
 - name: Upload certificates and get certificate key
@@ -85,11 +84,10 @@
 # Gộp lệnh join master
 - name: Khởi tạo lệnh join node master
   set_fact:
-    create_comman_join: "{{ command_join_cluster }} {{certificate_key_line}} "
+    create_comman_join: "{{ command_join_cluster }} {{ certificate_key_line }}"
   when: is_other_master
-  register: join_master
 
-- name: Display certificate key line
+- name: Display the combined join command
   debug:
-    var: join_master
+    var: create_comman_join
   when: is_other_master
