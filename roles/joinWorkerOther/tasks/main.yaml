@@ -3,7 +3,7 @@
     file: ../../global_vars/var.yaml
 
 # ############## CHECK THÔNG TIN MASTER  ####################
-- name: ============= MASTER ĐẦU TIÊN =============
+- name: ============= MASTER =============
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
@@ -11,39 +11,39 @@
   ansible.builtin.set_fact:
     is_other_worker: "{{ inventory_hostname in groups['slaves'] }}"
 
-- name: Debug the value of main master
+- name: ============= MASTER =============
   debug:
     var: is_first_master
 
-- name: Debug the value of other master
+- name: ============= WORKER KHÁC =============
   debug:
     var: is_other_worker
 
-# # ############## THÔNG TIN MASTER KHÁC  ####################
+# # ############## JOIN WORKER VÀO CLUSTER  ####################
 
-# # Create token join node
-# - name: Generate join command
-#   shell: kubeadm token create --print-join-command
-#   register: kubeadm_join_command
-#   when: is_first_master
+# Create token join node
+- name: Generate join command
+  shell: kubeadm token create --print-join-command
+  register: kubeadm_join_command
+  when: is_first_master
 
-# - name: Export command join cluster
-#   set_fact:
-#     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
-#   when: is_first_master
+- name: Export command join cluster
+  set_fact:
+    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
+  when: is_first_master
 
-# - name: Export command join cluster
-#   debug:
-#     var: command_join_cluster
-#   when: is_first_master
+- name: Export command join cluster
+  debug:
+    var: command_join_cluster
+  when: is_first_master
 
-# # JOIN WORKER
-# - name: JOIN MASTER OTHER IN CLUSTER
-#   shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
-#   register: join_master_output
-#   when: is_other_master
+# JOIN WORKER
+- name: JOIN MASTER OTHER IN CLUSTER
+  shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
+  register: join_worker_output
+  when: is_other_worker
 
-# - name: join_master_output
-#   debug:
-#     var: join_master_output
-#   when: is_other_master
+- name: XUẤT THÔNG TIN JOIN WORKER
+  debug:
+    var: join_worker_output
+  when: is_other_worker
