@@ -19,20 +19,20 @@
   debug:
     var: is_other_master
 # Init First Node Master
-# - name: Initialize Kubernetes on the first master
-#   shell: |
-#     kubeadm init \
-#       --kubernetes-version=1.28.0 \
-#       --control-plane-endpoint="192.168.140.31:6443" \
-#       --pod-network-cidr=172.16.0.0/16 \
-#       --upload-certs
-#   when: is_first_master
-#   register: kubeadm_init_output
+- name: Initialize Kubernetes on the first master
+  shell: |
+    kubeadm init \
+      --kubernetes-version=1.28.0 \
+      --control-plane-endpoint="192.168.140.31:6443" \
+      --pod-network-cidr=172.16.0.0/16 \
+      --upload-certs
+  when: is_first_master
+  register: kubeadm_init_output
 
-# - name: Display stdout of the setup script
-#   debug:
-#     var: kubeadm_init_output.stdout_lines
-#   when: is_first_master
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output.stdout_lines
+  when: is_first_master
 
 # # Create token join node
 # - name: Generate join command
