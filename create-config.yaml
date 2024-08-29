@@ -3,6 +3,6 @@
   roles:
     # - pingCheck
     # - setupCommon
-    # - role: createFirstMaster
-    #   when: inventory_hostname in groups['masters']
-    - deleteCommon
+    - role: createFirstMaster
+      when: inventory_hostname in groups['masters']
+    # - deleteCommon

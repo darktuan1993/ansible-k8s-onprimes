@@ -19,39 +19,47 @@
   debug:
     var: is_other_master
 
-# Init First Node Master
-- name: Initialize Kubernetes on the first master
-  shell: |
-    kubeadm init \
-      --kubernetes-version=1.28.0 \
-      --control-plane-endpoint="192.168.140.31:6443" \
-      --pod-network-cidr=172.16.0.0/16 \
-      --upload-certs
+###### CHUYỂN THÀNH PHẦN CẦN CÀI ĐẶT ###########
+- name: Copy Kubernetes manifest to remote server
+  copy:
+    src:  ../../global_vars
+    dest: /tmp/manifest
+    mode: '0755'
+    directory_mode: '0755'
   when: is_first_master
-  register: kubeadm_init_output
-
-- name: Display stdout of the setup script
-  debug:
-    var: kubeadm_init_output.stdout_lines
-  when: is_first_master
-
-#  tạo thư mục service account
-- name: Tạo thư mục service account
-  shell: |
-    mkdir -p $HOME/.kube
-    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-    chown $(id -u):$(id -g) $HOME/.kube/config
-  when: is_first_master
-  register: createfolder
-
-- name: Tạo thư mục service account
-  debug:
-    var: createfolder.stdout_lines
-  when: is_first_master
+# - name: Apply Kubernetes manifest using kubectl
+#   shell: kubectl apply -f /tmp/manifest.yaml
 
 
+# # Init First Node Master
+# - name: Initialize Kubernetes on the first master
+#   shell: |
+#     kubeadm init \
+#       --kubernetes-version=1.28.0 \
+#       --control-plane-endpoint="192.168.140.31:6443" \
+#       --pod-network-cidr=172.16.0.0/16 \
+#       --upload-certs
+#   when: is_first_master
+#   register: kubeadm_init_output
 
+# - name: Display stdout of the setup script
+#   debug:
+#     var: kubeadm_init_output
+#   when: is_first_master
 
+# #  tạo thư mục service account
+# - name: Tạo thư mục service account
+#   shell: |
+#     mkdir -p $HOME/.kube
+#     cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+#     chown $(id -u):$(id -g) $HOME/.kube/config
+#   when: is_first_master
+#   register: createfolder
+
+# - name: Tạo thư mục service account
+#   debug:
+#     var: createfolder
+#   when: is_first_master
 
 
 # # Create token join node
