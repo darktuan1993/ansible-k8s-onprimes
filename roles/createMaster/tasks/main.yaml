@@ -69,7 +69,7 @@
 
 - name: Extract line containing 'Using certificate key:'
   set_fact:
-    certificate_key_line: "{{ upload_certs_output.stdout_lines | select('search', 'Using certificate key:') }}"
+    certificate_key_line: "{{ upload_certs_output.stdout | select('search', 'Using certificate key:') }}"
   when: is_first_master
 
 - name: Display certificate key line
