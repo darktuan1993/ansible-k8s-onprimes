@@ -1,5 +1,5 @@
 # unset KUBECONFIG
-kubeadm reset
+kubeadm reset --force
 rm -rf ~/.kube
 # rm -rf /etc/cni/net.d
 # rm -rf /var/lib/cni/
