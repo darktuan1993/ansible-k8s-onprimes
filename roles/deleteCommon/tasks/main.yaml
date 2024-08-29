@@ -1,12 +1,5 @@
-- name: Copy remote
-  copy:
-    src: ../../global_vars/script/delete-ubuntu.sh
-    dest: /tmp/delete-ubuntu.sh
-    mode: "0755"
-  become: yes
-
 - name: Xóa Kubernetes
-  shell: /tmp/delete-ubuntu.sh
+  script: ../../script/delete-ubuntu.sh
   become: yes
   register: script_output
 
