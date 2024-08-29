@@ -18,6 +18,7 @@
 - name: Debug the value of other master
   debug:
     var: is_other_master
+
 # Init First Node Master
 - name: Initialize Kubernetes on the first master
   shell: |
@@ -33,6 +34,24 @@
   debug:
     var: kubeadm_init_output.stdout_lines
   when: is_first_master
+
+
+- name: Tạo thư mục service account
+  shell: |
+    mkdir -p $HOME/.kube
+    cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    chown $(id -u):$(id -g) $HOME/.kube/config
+  when: is_first_master
+  register: createfolder
+
+- name: Tạo thư mục service account
+  debug:
+    var: createfolder.stdout_lines
+  when: is_first_master
+
+
+
+
 
 # # Create token join node
 # - name: Generate join command
