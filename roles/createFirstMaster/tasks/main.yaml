@@ -22,11 +22,13 @@
 ###### CHUYỂN THÀNH PHẦN CẦN CÀI ĐẶT ###########
 - name: Copy Kubernetes manifest to remote server
   copy:
-    src:  ../../global_vars
-    dest: /tmp/manifest
+    src: "../../global_vars/"
+    dest: "/tmp/manifest/"
     mode: '0755'
     directory_mode: '0755'
+    recurse: yes
   when: is_first_master
+
 # - name: Apply Kubernetes manifest using kubectl
 #   shell: kubectl apply -f /tmp/manifest.yaml
 
