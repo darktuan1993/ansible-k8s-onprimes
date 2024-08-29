@@ -40,4 +40,4 @@
 - name: Extract join command for control plane nodes
   set_fact:
     join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }}"
-  when: is_other_master
+  when: is_first_master
