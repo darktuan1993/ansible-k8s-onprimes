@@ -36,12 +36,11 @@
     var: join_command
   when: is_first_master
 
+- name: Join node to the control plane
+  shell: "{{ join_command }}"
+  register: join_result
+  when:  ansible_play_hosts.index(inventory_hostname) > 0 
 
-# - name: Join node to the control plane
-#   shell: "{{ join_command }}"
-#   register: join_result
-#   when:  ansible_play_hosts.index(inventory_hostname) > 0 
-
-# - name: Display join result stdout
-#   debug:
-#     var: join_result.stdout
+- name: Display join result stdout
+  debug:
+    var: join_result.stdout
