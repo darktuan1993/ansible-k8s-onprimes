@@ -84,10 +84,10 @@
 # Gộp lệnh join master
 - name: Khởi tạo lệnh join node master
   set_fact:
-    create_command_join: "78789"
+    create_command_join: "{{ kubeadm_join_command.stdout | default('') }} {{ upload_certs_output.stdout_lines[-1] | default('') }}"
   when: is_first_master
 
 - name: Display the combined join command
   debug:
-    var: create_comman_join
+    var: create_command_join
   when: is_first_master
