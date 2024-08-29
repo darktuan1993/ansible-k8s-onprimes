@@ -61,15 +61,15 @@
     var: kubeadm_join_command.stdout
   when: is_first_master
 
+# Tạo Certificate Join cluster node master
+- name: Upload certificates and get certificate key
+  shell: kubeadm init phase upload-certs --upload-certs
+  register: upload_certs_output
+  when: is_first_master
+
+- name: Extract certificate key
+  set_fact:
+    certificate_key: "{{ upload_certs_output.stdout_lines | regex_search('Using certificate key:\\s+([a-zA-Z0-9]+)', '\\1') }}"
+  when: is_first_master
 
 
-
-
-# - name: Join node to the control plane
-#   shell: "{{ hostvars['192.168.140.31']['join_command'] }}"
-#   when: is_other_master
-
-
-# mkdir -p $HOME/.kube
-# sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
-# sudo chown $(id -u):$(id -g) $HOME/.kube/config
