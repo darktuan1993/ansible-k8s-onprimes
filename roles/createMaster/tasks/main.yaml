@@ -41,3 +41,7 @@
   set_fact:
     join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }}"
   when: is_first_master
+
+- name: Join node to the control plane
+  shell: "{{ join_command }}"
+  when: is_other_master
