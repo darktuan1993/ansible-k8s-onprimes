@@ -21,6 +21,7 @@
   when: is_first_master
   register: kubeadm_init_output
 
-# - name: Display stdout of the setup script
-#   debug:
-#     var: kubeadm_init_output.stdout_lines
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output.stdout_lines
+  when: is_first_master
