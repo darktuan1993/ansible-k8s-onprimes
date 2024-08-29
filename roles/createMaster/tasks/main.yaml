@@ -49,7 +49,6 @@
 #     var: createfolder.stdout_lines
 #   when: is_first_master
 
-
 # Create token join node
 - name: Generate join command
   shell: kubeadm token create --print-join-command
@@ -61,23 +60,32 @@
     var: kubeadm_join_command.stdout
   when: is_first_master
 
-# Tạo Certificate Join cluster node master
-- name: Upload certificates and get certificate key
-  shell: kubeadm init phase upload-certs --upload-certs
-  register: upload_certs_output
-  when: is_first_master
-
-- name: Extract line containing 'Using certificate key:'
+- name: Export command join cluster
   set_fact:
-    certificate_key_line: "{{ upload_certs_output.stdout_lines[-1] }}"
+    command_join_cluster: "{{kubeadm_join_command.stdout}}"
+  when: is_first_master
+  register: command_join_cluster
+
+
+- name: Display the join command
+  debug:
+    var: command_join_cluster
   when: is_first_master
 
-- name: Display certificate key line
-  debug:
-    var: certificate_key_line
-  when: is_first_master
 
-- name: Display certificate key line
-  debug:
-    var: upload_certs_output.stdout_lines
-  when: is_first_master
+
+# Tạo Certificate Join cluster node master
+# - name: Upload certificates and get certificate key
+#   shell: kubeadm init phase upload-certs --upload-certs
+#   register: upload_certs_output
+#   when: is_first_master
+
+# - name: Extract line containing 'Using certificate key:'
+#   set_fact:
+#     certificate_key_line: "{{ upload_certs_output.stdout_lines[-1] }}"
+#   when: is_first_master
+
+# - name: Display certificate key line
+#   debug:
+#     var: certificate_key_line
+#   when: is_first_master
