@@ -9,7 +9,7 @@
 
 - name: ============= WORKER KHÁC =============
   ansible.builtin.set_fact:
-    is_other_worker: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+    is_other_worker: "{{ inventory_hostname in groups['slaves'] }}"
 
 - name: Debug the value of main master
   debug:
