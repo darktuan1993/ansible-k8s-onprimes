@@ -74,5 +74,5 @@
 
 - name: Display certificate key
   debug:
-    var: upload_certs_output.stdout_lines
+    var: upload_certs_output.stdout_lines.[upload-certs] Using certificate key
   when: is_first_master
