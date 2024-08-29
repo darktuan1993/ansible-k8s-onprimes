@@ -2,6 +2,6 @@
   hosts: k8s-cluster
   roles:
     # - pingCheck
-    - setupCommon
+    # - setupCommon
     - role: createMaster
       when: inventory_hostname in groups['masters']

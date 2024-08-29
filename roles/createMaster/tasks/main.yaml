@@ -2,30 +2,42 @@
   include_vars:
     file: ../../global_vars/var.yaml
 
+
 - name: Check if this is the first master node
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-- name: Setup Node Master First
-  shell: |
-    echo "đây là node master 1"
-  when: is_first_master
-  register: script_output
-
-- name: Display stdout of the setup script
+- name: Debug the value of is_first_master
   debug:
-    var: script_output.stdout_lines
+    var: is_first_master
 
-- name: Initialize Kubernetes on the first master
-  shell: |
-    kubeadm init \
-      --kubernetes-version=1.28.0 \
-      --control-plane-endpoint="192.168.140.31:6443" \
-      --pod-network-cidr=172.16.0.0/16 \
-      --upload-certs
-  when: is_first_master
-  register: kubeadm_init_output
 
-- name: Display stdout of the setup script
-  debug:
-    var: kubeadm_init_output.stdout_lines
+
+
+# - name: Check if this is the first master node
+#   ansible.builtin.set_fact:
+#     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+# - name: Setup Node Master First
+#   shell: |
+#     echo "đây là node master 1"
+#   when: is_first_master
+#   register: script_output
+
+# - name: Display stdout of the setup script
+#   debug:
+#     var: script_output.stdout_lines
+
+# - name: Initialize Kubernetes on the first master
+#   shell: |
+#     kubeadm init \
+#       --kubernetes-version=1.28.0 \
+#       --control-plane-endpoint="192.168.140.31:6443" \
+#       --pod-network-cidr=172.16.0.0/16 \
+#       --upload-certs
+#   when: is_first_master
+#   register: kubeadm_init_output
+
+# - name: Display stdout of the setup script
+#   debug:
+#     var: kubeadm_init_output.stdout_lines
