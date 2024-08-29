@@ -64,7 +64,7 @@
 # Tạo Certificate Join cluster node master
 - name: Upload certificates and get certificate key
   shell: kubeadm init phase upload-certs --upload-certs
-  register: upload_certs_output.stdout_lines
+  register: upload_certs_output
   when: is_first_master
 
 - name: Extract certificate key
