@@ -25,3 +25,14 @@
   debug:
     var: kubeadm_init_output.stdout_lines
   when: is_first_master
+
+- name: Extract join command for control plane nodes
+  set_fact:
+    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('replace', '\\', '') | join(' ') }}"
+  when: is_first_master
+
+- name: Display stdout of the setup script
+  debug:
+    var: join_command
+  when: is_first_master
+
