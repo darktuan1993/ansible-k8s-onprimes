@@ -74,5 +74,5 @@
 
 - name: Display certificate key
   debug:
-    var: upload_certs_output
+    var: upload_certs_output.stdout_lines
   when: is_first_master
