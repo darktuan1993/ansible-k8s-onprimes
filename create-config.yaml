@@ -1,8 +1,7 @@
-
 - name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
   roles:
-    - pingCheck
+    # - pingCheck
     - setupCommon
-    - createMaster
-    # - deleteCommon
+    - role: createMaster
+      when: inventory_hostname in groups['masters']
