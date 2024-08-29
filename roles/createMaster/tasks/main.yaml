@@ -39,13 +39,15 @@
 
 - name: Extract join command for control plane nodes
   set_fact:
-    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }}"
+    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }} --discovery-token-ca-cert-hash sha256:<hash>"
   when: is_first_master
   register: kubeadmCommand
 
 - name: Xuất thông tin
   debug:
     var: kubeadmCommand
+  when: is_first_master
+
 
 
 # - name: Join node to the control plane
