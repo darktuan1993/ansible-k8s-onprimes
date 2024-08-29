@@ -14,7 +14,7 @@
 
 - name: Display stdout of the setup script
   debug:
-    var: script_output
+    var: script_output.stdout_lines
 
 - name: Initialize Kubernetes on the first master
   shell: |
@@ -26,10 +26,14 @@
   when: is_first_master
   register: kubeadm_init_output
 
+- name: Display stdout of the setup script
+  debug:
+    var: kubeadm_init_output
+
 - name: Extract join command for control plane nodes
   set_fact:
-    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('replace', '\\', '') | join(' ') }}"
-  when: is_first_master
+    join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | list | join(' ') }}"
+  when: ansible_play_hosts.index(inventory_hostname) == 0
 
 - name: Ensure join_command is defined
   debug:
@@ -38,4 +42,3 @@
 - name: Join node to the control plane
   shell: "{{ join_command }}"
   when: ansible_play_hosts.index(inventory_hostname) > 0
-
