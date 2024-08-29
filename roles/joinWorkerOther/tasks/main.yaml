@@ -24,22 +24,22 @@
 # Create token join node
 - name: Generate join command
   shell: kubeadm token create --print-join-command
-  register: kubeadm_join_command
+  register: kubeadm_join_command_worker
   when: is_first_master
 
 - name: Export command join cluster
   set_fact:
-    command_join_cluster: "{{ kubeadm_join_command.stdout }}"
+    command_join_worker_cluster: "{{ kubeadm_join_command_worker.stdout }}"
   when: is_first_master
 
 - name: Export command join cluster
   debug:
-    var: command_join_cluster
+    var: command_join_worker_cluster
   when: is_first_master
 
 # JOIN WORKER
 - name: JOIN MASTER OTHER IN CLUSTER
-  shell: "{{ hostvars[groups['masters'][0]].create_command_join }}"
+  shell: "{{ hostvars[groups['masters'][0]].command_join_worker_cluster }}"
   register: join_worker_output
   when: is_other_worker
 
