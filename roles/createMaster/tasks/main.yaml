@@ -34,7 +34,7 @@
 - name: Join node to the control plane
   shell: "{{ join_command }}"
   register: join_result
-  when: ansible_play_hosts.index(inventory_hostname) > 0
+  when:  ansible_play_hosts.index(inventory_hostname) > 0 
 
 - name: Display join result stdout
   debug:
