@@ -41,6 +41,12 @@
   set_fact:
     join_command: "{{ kubeadm_init_output.stdout_lines | select('search', '^kubeadm join') | map('regex_replace', '\\\\', '') | join(' ') }}"
   when: is_first_master
+  register: kubeadmCommand
+
+- name: Xuất thông tin
+  debug:
+    var: kubeadmCommand
+
 
 # - name: Join node to the control plane
 #   shell: "{{ hostvars['192.168.140.31']['join_command'] }}"
