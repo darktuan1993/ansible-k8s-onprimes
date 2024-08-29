@@ -65,6 +65,11 @@
     command_join_cluster: "{{ kubeadm_join_command.stdout }}"
   when: is_first_master
 
+- name: Export command join cluster
+  debug:
+    var: command_join_cluster
+  when: is_first_master
+
 # Tạo Certificate Join cluster node master
 - name: Upload certificates and get certificate key
   shell: kubeadm init phase upload-certs --upload-certs
