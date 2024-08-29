@@ -76,20 +76,20 @@
   register: upload_certs_output
   when: is_first_master
 
-- name: Extract line containing 'Using certificate key:'
-  set_fact:
-    certificate_key_line: "{{ upload_certs_output.stdout_lines[-1] }}"
-  when: is_first_master
+# - name: Extract line containing 'Using certificate key:'
+#   set_fact:
+#     certificate_key_line: "{{ upload_certs_output.stdout_lines[-1] }}"
+#   when: is_first_master
 
-- name: Display certificate key line
-  debug:
-    var: certificate_key_line
-  when: is_first_master
+# - name: Display certificate key line
+#   debug:
+#     var: certificate_key_line
+#   when: is_first_master
 
 # Gộp lệnh join master
 - name: Khởi tạo lệnh join node master
   set_fact:
-    create_command_join: "{{ command_join_cluster }} {{ certificate_key_line }}"
+    create_command_join: "{{ command_join_cluster }} {{ upload_certs_output.stdout_lines[-1] }}"
   when: is_first_master
 
 - name: Display the combined join command
