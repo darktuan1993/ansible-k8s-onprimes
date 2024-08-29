@@ -26,7 +26,6 @@
     dest: "/tmp"
     mode: '0755'
     directory_mode: '0755'
-    recurse: yes
   when: is_first_master
 
 - name: Debug message after copy
