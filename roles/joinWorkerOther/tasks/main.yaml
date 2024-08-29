@@ -3,13 +3,13 @@
     file: ../../global_vars/var.yaml
 
 # ############## CHECK THÔNG TIN MASTER  ####################
-- name: MASTER ĐẦU TIÊN
+- name: ============= MASTER ĐẦU TIÊN =============
   ansible.builtin.set_fact:
     is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
 
-- name: MASTER KHÁC
+- name: ============= WORKER KHÁC =============
   ansible.builtin.set_fact:
-    is_other_master: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
+    is_other_worker: "{{ ansible_play_hosts.index(inventory_hostname) > 0 }}"
 
 - name: Debug the value of main master
   debug:
@@ -17,7 +17,7 @@
 
 - name: Debug the value of other master
   debug:
-    var: is_other_master
+    var: is_other_worker
 
 # # ############## THÔNG TIN MASTER KHÁC  ####################
 
