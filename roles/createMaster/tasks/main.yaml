@@ -84,10 +84,10 @@
 # Gộp lệnh join master
 - name: Khởi tạo lệnh join node master
   set_fact:
-    create_command_join: "{{ hostvars[groups['masters'][0]].command_join_cluster }} {{ hostvars[groups['masters'][0]].certificate_key_line }}"
-  when: is_other_master
+    create_command_join: "{{ command_join_cluster }} {{ certificate_key_line }}"
+  when: is_first_master
 
 - name: Display the combined join command
   debug:
     var: create_comman_join
-  when: is_other_master
+  when: is_first_master
