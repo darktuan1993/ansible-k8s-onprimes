@@ -31,9 +31,9 @@
   register: kubeadm_init_output
 
 - name: Display stdout of the setup script
-#   debug:
-#     var: kubeadm_init_output.stdout_lines
-#   when: is_first_master
+  debug:
+    var: kubeadm_init_output.stdout_lines
+  when: is_first_master
 
 #  tạo thư mục service account
 - name: Tạo thư mục service account
@@ -45,9 +45,9 @@
   register: createfolder
 
 - name: Tạo thư mục service account
-#   debug:
-#     var: createfolder.stdout_lines
-#   when: is_first_master
+  debug:
+    var: createfolder.stdout_lines
+  when: is_first_master
 
 # Create token join node
 - name: Generate join command
