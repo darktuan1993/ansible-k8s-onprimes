@@ -91,3 +91,10 @@
   debug:
     var: create_command_join
   when: is_first_master
+
+# Join Node Master
+- name: Join Node Master
+  shell: |
+    {{create_command_join}}
+  register: upload_certs_output
+  when: is_other_master
