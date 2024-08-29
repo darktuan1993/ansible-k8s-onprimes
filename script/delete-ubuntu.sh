@@ -1,4 +1,4 @@
-unset KUBECONFIG
+# unset KUBECONFIG
 kubeadm reset
 rm -rf ~/.kube
 # rm -rf /etc/cni/net.d
