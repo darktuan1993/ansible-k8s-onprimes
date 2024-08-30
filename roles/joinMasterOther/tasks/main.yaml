@@ -1,7 +1,3 @@
-- name: List name record domain
-  include_vars:
-    file: ../../global_vars/var.yaml
-
 # ############## CHECK THÔNG TIN MASTER  ####################
 - name: ============= MASTER ĐẦU TIÊN =============
   ansible.builtin.set_fact:

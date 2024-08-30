@@ -1,0 +1,12 @@
+- name: THÊM THÔNG TIN /etc/hosts
+  ansible.builtin.blockinfile:
+    path: /etc/hosts
+    state: present
+    block: |
+        {{IP_LOADBALANCING}} {{DOMAIN_APP}}
+        {{IP_LOADBALANCING}}  {{DOMAIN_MANAGER}}
+
+        
+- name: Set the hostname
+  ansible.builtin.hostname:
+    name: my-new-hostname

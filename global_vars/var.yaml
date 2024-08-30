@@ -2,6 +2,13 @@
 VERSION_k8s: 1.28
 VERSION_PATCH: 13-1.1
 
+
+# Thông tin load balancing 
+IP_LOADBALANCING: 192.168.3.10
+DOMAIN_APP: application-cluster-k8s.bravo.com.vn
+DOMAIN_MANAGER: manager-cluster-k8s.bravo.com.vn
+
+
 # Config Master
 control-plane-endpoint: 
 pod_network_cidr: 172.16.0.0/16

@@ -66,6 +66,18 @@
     for file in /tmp/script/manifest/*.yaml; do
         kubectl apply -f "$file"
     done
+    echo " ================= Cài đặt helm chart ================= "
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    kubectl create ns bravo-monitoring
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install metrics-k8s-stats prometheus-community/kube-state-metrics --namespace bravo-monitoring --set replicas=2
+    helm install node-exporter prometheus-community/prometheus-node-exporter --namespace bravo-monitoring
+    echo "================= setup CSI Container ================="
+    curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.8.0/deploy/install-driver.sh | bash -s v4.8.0 --
+
   when: is_first_master
   register: run_manifest
 
