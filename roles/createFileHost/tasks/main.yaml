@@ -3,5 +3,26 @@
     path: /etc/hosts
     state: present
     block: |
-        {{IP_LOADBALANCING}} {{DOMAIN_APP}}
-        {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
+      {{IP_LOADBALANCING}} {{DOMAIN_APP}}
+      {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
+
+- name: Determine position in the masters group
+  set_fact:
+    master_position: "{{ groups['masters'].index(inventory_hostname) + 1 }}"
+  when: inventory_hostname in groups['masters']
+
+- name: Determine position in the slaves group
+  set_fact:
+    slave_position: "{{ groups['slaves'].index(inventory_hostname) + 1 }}"
+  when: inventory_hostname in groups['slaves']
+
+- name: Print position
+  debug:
+    msg: >
+      {% if inventory_hostname in groups['masters'] %}
+        This is master number {{ master_position }}
+      {% elif inventory_hostname in groups['slaves'] %}
+        This is slave number {{ slave_position }}
+      {% else %}
+        This host is not in masters or slaves groups
+      {% endif %}
