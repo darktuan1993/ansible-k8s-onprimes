@@ -1,11 +1,11 @@
 - name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
   roles:
-    - pingCheck
-    - setupCommon
-    - role: createFirstMaster
-      when: inventory_hostname in groups['masters']
-    - role: joinMasterOther
-      when: inventory_hostname in groups['masters']
-    - joinWorkerOther
-    # - deleteCommon
+    # - pingCheck
+    # - setupCommon
+    # - role: createFirstMaster
+    #   when: inventory_hostname in groups['masters']
+    # - role: joinMasterOther
+    #   when: inventory_hostname in groups['masters']
+    # - joinWorkerOther
+    - deleteCommon
