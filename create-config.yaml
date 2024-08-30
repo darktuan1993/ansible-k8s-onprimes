@@ -1,6 +1,6 @@
 - name: Check list variable
   include_vars:
-    file: ../../global_vars/var.yaml
+    file: global_vars/var.yaml
 
 - name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
