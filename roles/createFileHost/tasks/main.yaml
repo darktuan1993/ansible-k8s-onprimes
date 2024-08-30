@@ -6,23 +6,12 @@
       {{IP_LOADBALANCING}} {{DOMAIN_APP}}
       {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
 
-- name: Determine position in the masters group
+- name: Determine hostname based on position in masters group
   set_fact:
-    master_position: "{{ groups['masters'].index(inventory_hostname) + 1 }}"
-  when: inventory_hostname in groups['masters']
+    hostname: "master{{ item }}"
+  loop: "{{ range(1, groups['masters']|length + 1)|list }}"
+  when: inventory_hostname == groups['masters'][item - 1]
 
-- name: Determine position in the slaves group
-  set_fact:
-    slave_position: "{{ groups['slaves'].index(inventory_hostname) + 1 }}"
-  when: inventory_hostname in groups['slaves']
-
-- name: Print position
-  debug:
-    msg: >
-      {% if inventory_hostname in groups['masters'] %}
-        This is master number {{ master_position }}
-      {% elif inventory_hostname in groups['slaves'] %}
-        This is slave number {{ slave_position }}
-      {% else %}
-        This host is not in masters or slaves groups
-      {% endif %}
+- name: Set the hostname
+  ansible.builtin.hostname:
+    name: "{{ hostname }}"
