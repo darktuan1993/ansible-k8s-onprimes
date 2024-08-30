@@ -9,4 +9,4 @@
     #   when: inventory_hostname in groups['masters']
     ######################### JOIN WORKER ####################3
     # - joinWorkerOther
-    - deleteCommon
+    # - deleteCommon
