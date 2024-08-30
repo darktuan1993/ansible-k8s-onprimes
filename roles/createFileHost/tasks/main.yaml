@@ -4,9 +4,4 @@
     state: present
     block: |
         {{IP_LOADBALANCING}} {{DOMAIN_APP}}
-        {{IP_LOADBALANCING}}  {{DOMAIN_MANAGER}}
-
-        
-- name: Set the hostname
-  ansible.builtin.hostname:
-    name: my-new-hostname
+        {{IP_LOADBALANCING}} {{DOMAIN_MANAGER}}
