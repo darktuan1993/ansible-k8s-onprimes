@@ -62,7 +62,7 @@
 
 - name: Apply all Kubernetes manifests using kubectl
   shell: |
-    for file in /tmp/script/cni/*.yaml; do
+    for file in /tmp/script/manifest/*.yaml; do
         kubectl apply -f "$file"
     done
   when: is_first_master
