@@ -34,7 +34,7 @@
     kubeadm init \
       --kubernetes-version=1.28.0 \
       --control-plane-endpoint="192.168.140.31:6443" \
-      --pod-network-cidr=172.16.0.0/16 \
+      --pod-network-cidr={{pod-network-cidr}} \
       --upload-certs
   when: is_first_master
   register: kubeadm_init_output

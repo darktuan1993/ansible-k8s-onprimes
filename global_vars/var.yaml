@@ -3,3 +3,6 @@ VERSION_k8s: 1.28
 VERSION_PATCH: 0-1.1
 
 
+
+control-plane-endpoint: 
+pod-network-cidr: 172.16.0.0/16

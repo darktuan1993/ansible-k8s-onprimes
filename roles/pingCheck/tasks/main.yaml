@@ -1,2 +1,2 @@
-- name: Example from an Ansible Playbook
+- name: KIỂM TRA THÔNG TIN
   ansible.builtin.ping:

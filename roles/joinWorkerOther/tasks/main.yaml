@@ -32,10 +32,10 @@
     command_join_worker_cluster: "{{ kubeadm_join_command_worker.stdout }}"
   when: is_first_master
 
-- name: Export command join cluster
-  debug:
-    var: command_join_worker_cluster
-  when: is_first_master
+# - name: Export command join cluster
+#   debug:
+#     var: command_join_worker_cluster
+#   when: is_first_master
 
 # JOIN WORKER
 - name: JOIN MASTER OTHER IN CLUSTER
