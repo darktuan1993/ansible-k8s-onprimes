@@ -62,12 +62,13 @@
 
 - name: Apply all Kubernetes manifests using kubectl
   shell: |
+    kubectl create ns istio-system
     for file in /tmp/script/manifest/*.yaml; do
         kubectl apply -f "$file"
     done
   when: is_first_master
   register: run_manifest
-  
+
 - name: KHỞI CHẠY MANIFEST
   debug:
     var: run_manifest
