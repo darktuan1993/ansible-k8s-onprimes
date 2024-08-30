@@ -7,5 +7,5 @@
     #   when: inventory_hostname in groups['masters']
     # - role: joinMasterOther
     #   when: inventory_hostname in groups['masters']
-    - joinWorkerOther
-    # - deleteCommon
+    # - joinWorkerOther
+    - deleteCommon
