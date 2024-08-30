@@ -2,8 +2,7 @@
 VERSION_k8s: 1.28
 VERSION_PATCH: 0-1.1
 
-
-
+# Config Master
 control-plane-endpoint: 
 pod_network_cidr: 172.16.0.0/16
 ip_loadbalancing_cluster: 192.168.140.200
