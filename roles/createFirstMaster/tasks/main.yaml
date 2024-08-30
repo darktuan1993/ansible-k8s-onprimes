@@ -33,7 +33,7 @@
   shell: |
     kubeadm init \
       --kubernetes-version=1.28.0 \
-      --control-plane-endpoint="{{IP_LOADBALANCING}}:6443" \
+      --control-plane-endpoint="{{IP_LOADBALANCING}}:{{PORT_CLUSTER_APP}}}" \
       --pod-network-cidr={{pod_network_cidr}} \
       --upload-certs
   when: is_first_master
