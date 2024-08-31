@@ -6,17 +6,6 @@
 # modprobe br_netfilter
 # echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
 # echo 'br_netfilter' > /etc/modules-load.d/k8s.conf
-
-
-VERSION_k8s=$1
-VERSION_PATCH=$2
-
-echo $VERSION_k8s
-echo $VERSION_PATCH
-
-
-
-
 # cat << EOF | tee /etc/sysctl.d/kubernetes.conf
 # net.bridge.bridge-nf-call-ip6tables = 1
 # net.bridge.bridge-nf-call-iptables = 1
@@ -25,20 +14,26 @@ echo $VERSION_PATCH
 # sysctl -p
 
 
-mkdir -p /etc/apt/keyrings
-curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --batch --yes -o /etc/apt/keyrings/docker.gpg
+# mkdir -p /etc/apt/keyrings
+# curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor --batch --yes -o /etc/apt/keyrings/docker.gpg
 
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+# echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
 
 
+VERSION_k8s=$1
+VERSION_PATCH=$2
 
+echo $VERSION_k8s
+echo $VERSION_PATCH
+
+#############
 apt-get update && apt-get install containerd.io -y
 containerd config default | tee /etc/containerd/config.toml
 sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i /etc/containerd/config.toml
 systemctl restart containerd
 
 
-
+#############
 curl -fsSL https://pkgs.k8s.io/core:/stable:/v$VERSION_k8s/deb/Release.key | sudo gpg --dearmor --batch --yes -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v$VERSION_k8s/deb/ /" | sudo tee /etc/apt/sources.list.d/kubernetes.list
 
@@ -46,8 +41,6 @@ echo "deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.
 apt-get update
 sudo apt-get install -y kubeadm=$VERSION_k8s.$VERSION_PATCH kubelet=$VERSION_k8s.$VERSION_PATCH kubectl=$VERSION_k8s.$VERSION_PATCH --allow-change-held-packages
 apt-mark hold kubelet kubeadm kubectl
-
-
 
 ############
 
@@ -60,7 +53,7 @@ mv crictl /usr/local/bin
 cat <<EOF | tee /etc/crictl.yaml
 runtime-endpoint: unix:///run/containerd/containerd.sock
 EOF
-
+#############
 sudo wget https://storage.googleapis.com/gvisor/releases/nightly/latest/containerd-shim-runsc-v1 -O /usr/local/bin/containerd-shim-runsc-v1
 sudo chmod +x /usr/local/bin/containerd-shim-runsc-v1
 
