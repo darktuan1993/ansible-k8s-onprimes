@@ -75,6 +75,20 @@
     helm repo update
     helm install metrics-k8s-stats prometheus-community/kube-state-metrics --namespace bravo-monitoring --set replicas=2
     helm install node-exporter prometheus-community/prometheus-node-exporter --namespace bravo-monitoring
+    echo "================= setup Rancher ================="
+    helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+    kubectl create namespace cattle-system
+    helm repo add jetstack https://charts.jetstack.io
+    helm repo update
+    helm install cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --set crds.enabled=true
+    helm install rancher rancher-stable/rancher \
+    --namespace cattle-system \
+    --set hostname=m-rancher.bravo.com.vn \
+    --set bootstrapPassword=admin
+
     echo "================= setup CSI Container ================="
     curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.8.0/deploy/install-driver.sh | bash -s v4.8.0 --
 
