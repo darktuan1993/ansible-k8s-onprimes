@@ -7,7 +7,7 @@ VERSION_PATCH: 13-1.1
 IP_LOADBALANCING: 192.168.3.10
 DOMAIN_APP: application-cluster-k8s.bravo.com.vn
 DOMAIN_MANAGER: manager-cluster-k8s.bravo.com.vn
-PORT_CLUSTER_APP: 6444
+PORT_CLUSTER_APP: 6443
 
 # Config Master
 control-plane-endpoint: 
