@@ -1,0 +1,56 @@
+# Check node Master chính
+- name: MASTER ĐẦU TIÊN
+  ansible.builtin.set_fact:
+    is_first_master: "{{ ansible_play_hosts.index(inventory_hostname) == 0 }}"
+
+- name: Debug the value of main master
+  debug:
+    var: is_first_master
+
+
+################## CHẠY KHỞI CHẠY CÁC PLUGIN #############
+
+- name: KHỞI CHẠY CÁC PLUGIN MANIFEST
+  shell: |
+    kubectl create ns argocd
+    kubectl create ns istio-system
+
+    for file in /tmp/script/manifest/*.yaml; do
+        kubectl apply -f "$file"
+    done
+
+    kubectl apply -f /tmp/script/manifest/argocd/*.yaml -n argocd
+    
+    echo " ================= Cài đặt helm chart ================= "
+    curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
+    chmod 700 get_helm.sh
+    ./get_helm.sh
+    kubectl create ns bravo-monitoring
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
+    helm repo update
+    helm install metrics-k8s-stats prometheus-community/kube-state-metrics --namespace bravo-monitoring --set replicas=2
+    helm install node-exporter prometheus-community/prometheus-node-exporter --namespace bravo-monitoring
+    echo "================= setup Rancher ================="
+    helm repo add rancher-stable https://releases.rancher.com/server-charts/stable
+    kubectl create namespace cattle-system
+    helm repo add jetstack https://charts.jetstack.io
+    helm repo update
+    helm install cert-manager jetstack/cert-manager \
+    --namespace cert-manager \
+    --create-namespace \
+    --set crds.enabled=true
+    helm install rancher rancher-stable/rancher \
+    --namespace cattle-system \
+    --set hostname=m-rancher.bravo.com.vn \
+    --set bootstrapPassword=admin
+
+    echo "================= setup CSI Container ================="
+    curl -skSL https://raw.githubusercontent.com/kubernetes-csi/csi-driver-nfs/v4.8.0/deploy/install-driver.sh | bash -s v4.8.0 --
+
+  when: is_first_master
+  register: run_manifest
+
+- name: KHỞI CHẠY MANIFEST
+  debug:
+    var: run_manifest
+  when: is_first_master
