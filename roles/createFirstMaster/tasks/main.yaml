@@ -65,7 +65,11 @@
     kubectl create ns argocd
     kubectl create ns istio-system
     for file in /tmp/script/manifest/*.yaml; do
-        kubectl apply -f "$file"
+        if [[ "$(basename "$file")" == "argocd.yaml" ]]; then
+            kubectl apply -f "$file" -n argocd
+        else
+            kubectl apply -f "$file"
+        fi
     done
     echo " ================= Cài đặt helm chart ================= "
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
