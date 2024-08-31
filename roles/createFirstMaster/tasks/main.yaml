@@ -64,10 +64,11 @@
   shell: |
     kubectl create ns argocd
     kubectl create ns istio-system
+
     for file in /tmp/script/manifest/*.yaml; do
-            kubectl apply -f "$file"
-        fi
+        kubectl apply -f "$file"
     done
+
     kubectl apply -f /tmp/script/manifest/argocd/*.yaml -n argocd
     echo " ================= Cài đặt helm chart ================= "
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
