@@ -3,6 +3,7 @@ kubeadm reset --force
 rm -rf ~/.kube
 rm -rf crictl-v1.28.0-linux-amd64.tar.gz*
 rm -rf wazuh-agent*
+rm -rf get_helm*
 # rm -rf /etc/cni/net.d
 # rm -rf /var/lib/cni/
 # rm -rf /var/run/kubernetes/
