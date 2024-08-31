@@ -20,4 +20,5 @@
       when: inventory_hostname in groups['masters']
     ######################## JOIN WORKER ####################
     - joinWorkerOther
+    - setupPluginKube
     # - deleteCommon
