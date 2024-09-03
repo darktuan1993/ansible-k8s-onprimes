@@ -8,13 +8,13 @@
 
 - name: HOSTNAME MASTER
   set_fact:
-    hostname: "bravo-manage-master{{ item }}"
+    hostname: "bravo-application-master{{ item }}"
   loop: "{{ range(1, groups['masters']|length + 1)|list }}"
   when: inventory_hostname == groups['masters'][item - 1]
 
 - name: HOSTNAME SLAVES
   set_fact:
-    hostname: "bravo-manage-slaves{{ item }}"
+    hostname: "bravo-application-slaves{{ item }}"
   loop: "{{ range(1, groups['slaves']|length + 1)|list }}"
   when: inventory_hostname == groups['slaves'][item - 1]
 
