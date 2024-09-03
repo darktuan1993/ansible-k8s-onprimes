@@ -9,16 +9,16 @@
 - name: CREATE CLUSTER KUBERNETES 
   hosts: k8s-cluster
   roles:
-    - pingCheck
-    - createFileHost
-    ######################## SETUP CƠ BẢN ####################
-    - setupCommon
-    ####################### CÀI ĐẶT MASTER VÀ JOIN MASTER ####################   
-    - role: createFirstMaster
-      when: inventory_hostname in groups['masters']
-    - role: joinMasterOther
-      when: inventory_hostname in groups['masters']
-    ######################## JOIN WORKER ####################
-    - joinWorkerOther
-    - setupPluginKube
-    # - deleteCommon
+    # - pingCheck
+    # - createFileHost
+    # ######################## SETUP CƠ BẢN ####################
+    # - setupCommon
+    # ####################### CÀI ĐẶT MASTER VÀ JOIN MASTER ####################   
+    # - role: createFirstMaster
+    #   when: inventory_hostname in groups['masters']
+    # - role: joinMasterOther
+    #   when: inventory_hostname in groups['masters']
+    # ######################## JOIN WORKER ####################
+    # - joinWorkerOther
+    # - setupPluginKube
+    - deleteCommon
